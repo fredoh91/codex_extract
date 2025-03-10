@@ -1,0 +1,19 @@
+{
+  "type": "module",
+  "name": "codex_extract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "logrotate-stream": "^0.2.9",
+    "mysql2": "^3.13.0",
+    "odbc": "^2.4.9",
+    "pino": "^9.6.0"
+  }
+}
