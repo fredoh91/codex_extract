@@ -4,5 +4,4 @@ node_modules/
 # JSON_Save/
 nodemon.json
 test_*.js
-.qodo/
-
+.qodo
