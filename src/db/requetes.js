@@ -3,6 +3,14 @@ import {
   logger,
 } from '../logs_config.js'
 
+/**
+ * Cette fonction renvoie un tableau de codeVU à traiter
+ * permettant d'alimenter la requete d'import et de traiter les données par lot
+ * 
+ * @param {*} connectionCodexOdbc : connexion à la base CODEX via ODBC
+ * @param {*} nbCodeVU : nombre de codeVU à traiter par lot
+ * @returns : un tableau de codeVU à traiter
+ */
 async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
     const SQL_CodeVU = `SELECT DISTINCT VU.codeVU
                                     FROM VU 
@@ -30,6 +38,15 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
     }
   }
 
+  /**
+   * Fonction de traitement des données CODEX proprement dite.
+   * Les données sont récupérées depuis la base CODEX via ODBC, puis insérées dans la base CODEX_extract
+   * 
+   * @param {*} codeVUArray 
+   * @param {*} connectionCodexOdbc 
+   * @param {*} connectionCodexExtract 
+   * @param {*} formattedDate 
+   */
   async function trtLotCodeVU (codeVUArray, connectionCodexOdbc, connectionCodexExtract, formattedDate) {
     const codeVUString = codeVUArray.map(codeVU => `'${codeVU}'`).join(',');
     const sSQL_select = donneSQL_select(codeVUString);
@@ -82,7 +99,13 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
     }
   }
 
-
+  /**
+   * Cette fonction renvoie la requête SQL permettant de récupérer les données CODEX
+   * 
+   * @param {*} lstCodeVU_string : liste des codeVU à traiter, sous forme de chaine de caractères.
+   *                                Ce paramètre est optionnel, si non renseigné, la requête retournera l'ensemble des données CODEX
+   * @returns : requête SQL sous forme de chaine de caractère
+   */
   function donneSQL_select(lstCodeVU_string='') {
     const sSQL_select = `SELECT DISTINCT
                             VU.codeVU,
@@ -129,7 +152,14 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
                             `;  
     return sSQL_select;
   }
-
+  
+  /**
+   * Découpe un tableau de codeVU en plusieurs tableaux de taille égale "chunkSize"
+   * Chaque tableau de second niveau correspondra aun lot à traiter
+   * @param {*} array 
+   * @param {*} chunkSize 
+   * @returns 
+   */
   function chunkArray(array, chunkSize) {
       const result = [];
       for (let i = 0; i < array.length; i += chunkSize) {

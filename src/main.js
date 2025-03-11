@@ -35,6 +35,9 @@ dotenv.config({ path: envPath });
 // Nombre total de lignes à traiter pour les tests
 const NB_CODEVU_A_TRAITER_PAR_LOT = parseInt(process.env.NB_CODEVU_A_TRAITER_PAR_LOT, 10) || 100;
 
+/**
+ * Fonction principale
+ */
 const main = async () => {
 
   if (process.env.TYPE_EXECUTION == 'Prod') {
@@ -65,25 +68,25 @@ const main = async () => {
   
   const formattedDate = donneformattedDate();
 
-    // TRUNCATE dans CODEX_extract
-    const SQL_truncate = `TRUNCATE TABLE dashboard_rs_5 ;`
-    await connectionCodexExtract.query(SQL_truncate);
+  // TRUNCATE dans CODEX_extract
+  const SQL_truncate = `TRUNCATE TABLE dashboard_rs_5 ;`
+  await connectionCodexExtract.query(SQL_truncate);
 
-    // permet de couper la liste des codeVU à traiter en lots de NB_CODEVU_A_TRAITER_PAR_LOT
-    const lstCodeVU = await donneTabCodeVU (connectionCodexOdbc,NB_CODEVU_A_TRAITER_PAR_LOT);
+  // permet de couper la liste des codeVU à traiter en lots de NB_CODEVU_A_TRAITER_PAR_LOT
+  const lstCodeVU = await donneTabCodeVU (connectionCodexOdbc,NB_CODEVU_A_TRAITER_PAR_LOT);
 
-    // Traitement par lot
-    const promises_trtCodeVU = lstCodeVU.map((codeVUArray, index) => {
-      return trtLotCodeVU(codeVUArray, connectionCodexOdbc, connectionCodexExtract, formattedDate);
-    });
+  // Traitement par lot
+  const promises_trtCodeVU = lstCodeVU.map((codeVUArray, index) => {
+    return trtLotCodeVU(codeVUArray, connectionCodexOdbc, connectionCodexExtract, formattedDate);
+  });
 
-    // pour attendre la fin de tous les traitements trtLotCodeVU
-    await Promise.all(promises_trtCodeVU);
+  // pour attendre la fin de tous les traitements trtLotCodeVU
+  await Promise.all(promises_trtCodeVU);
 
-    await closePoolCodexExtract(poolCodexExtract);
-    await closePoolCodexOdbc(poolCodexOdbc);
+  await closePoolCodexExtract(poolCodexExtract);
+  await closePoolCodexOdbc(poolCodexOdbc);
 
-    logger.info('Fin import : CODEX => CODEX_extract');
+  logger.info('Fin import : CODEX => CODEX_extract');
   
   }
   
