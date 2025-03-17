@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "target": "ES2021",
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node16",
+        "module": "Node16",
+    },
+    "include": [
+      "src/**/*" // Inclut tous les fichiers dans le répertoire src et ses sous-répertoires
+    ],
+    "exclude": [
+      "node_modules", // Exclut le répertoire node_modules
+      "**/*.test.ts",  // Exclut les fichiers de test, par exemple
+      "src/test.ts"
+    ]
+}

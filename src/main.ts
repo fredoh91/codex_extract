@@ -1,4 +1,3 @@
-
 import { 
   createPoolCodexExtract,
   closePoolCodexExtract,
@@ -38,7 +37,7 @@ const NB_CODEVU_A_TRAITER_PAR_LOT = parseInt(process.env.NB_CODEVU_A_TRAITER_PAR
 /**
  * Fonction principale
  */
-const main = async () => {
+const main = async (): Promise<void> => {
 
   if (process.env.TYPE_EXECUTION == 'Prod') {
     process.on('uncaughtException', (err) => {
@@ -50,11 +49,11 @@ const main = async () => {
     });
   
     process.on('unhandledRejection', (reason, promise) => {
-      const stackLines = reason.stack.split('\n');
+      const stackLines = (reason as Error).stack.split('\n');
       const location = stackLines[1].trim(); // Typically, the second line contains the location
       logger.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
       logger.error(`Location: ${location}`);
-      logger.error(reason.stack);
+      logger.error((reason as Error).stack);
     });
   }
   
@@ -76,9 +75,13 @@ const main = async () => {
   const lstCodeVU = await donneTabCodeVU (connectionCodexOdbc,NB_CODEVU_A_TRAITER_PAR_LOT);
 
   // Traitement par lot
-  const promises_trtCodeVU = lstCodeVU.map((codeVUArray, index) => {
+  interface CodeVUArray {
+    // Define the structure of codeVUArray if known
+  }
+  const promises_trtCodeVU: Promise<void>[] = lstCodeVU.map((codeVUArray: string[], index: number): Promise<void> => {
     return trtLotCodeVU(codeVUArray, connectionCodexOdbc, connectionCodexExtract, formattedDate);
   });
+
 
   // pour attendre la fin de tous les traitements trtLotCodeVU
   await Promise.all(promises_trtCodeVU);

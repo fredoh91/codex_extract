@@ -15,5 +15,9 @@
     "mysql2": "^3.13.0",
     "odbc": "^2.4.9",
     "pino": "^9.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "^5.8.2"
   }
 }

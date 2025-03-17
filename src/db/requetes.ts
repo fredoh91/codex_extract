@@ -3,6 +3,37 @@ import {
   logger,
 } from '../logs_config.js'
 
+// Interfaces pour typer les données
+interface CodeVUResult {
+  codeVU: string;
+}
+
+interface CodexResult {
+  codeVU: string;
+  codeCIS: string;
+  codeDossier: string;
+  nomVU: string;
+  typeProcedure: string;
+  CodeATC: string;
+  LibATC: string;
+  forme_pharma: string;
+  voie_admin: string;
+  statutSpecialite: string;
+  codeTerme: number;
+  codeProduit: string;
+  indicValide: number;
+  codeCIP13: string;
+  nomPresentation: string;
+  nomSubstance: string;
+  dosageLibra: string;
+  ClasseACP_libCourt: string;
+}
+
+// Types pour les connexions (à ajuster selon votre implémentation spécifique)
+interface DbConnection {
+  query(sql: string, values?: any[]): Promise<any>;
+}
+
 /**
  * Cette fonction renvoie un tableau de codeVU à traiter
  * permettant d'alimenter la requete d'import et de traiter les données par lot
@@ -11,7 +42,7 @@ import {
  * @param {*} nbCodeVU : nombre de codeVU à traiter par lot
  * @returns : un tableau de codeVU à traiter
  */
-async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
+async function donneTabCodeVU (connectionCodexOdbc: DbConnection,nbCodeVU: number): Promise<string[][]> {
     const SQL_CodeVU = `SELECT DISTINCT VU.codeVU
                                     FROM VU 
                                     INNER JOIN VUTitulaires 	ON VU.codeVU = VUTitulaires.codeVU
@@ -33,7 +64,7 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
         return chunkedArray
 
     } catch (err) {
-      console.error(erreur);
+      console.error(err);
     } finally {
     }
   }
@@ -47,7 +78,7 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
    * @param {*} connectionCodexExtract 
    * @param {*} formattedDate 
    */
-  async function trtLotCodeVU (codeVUArray, connectionCodexOdbc, connectionCodexExtract, formattedDate) {
+  async function trtLotCodeVU (codeVUArray: string[], connectionCodexOdbc: DbConnection, connectionCodexExtract: DbConnection, formattedDate: string) {
     const codeVUString = codeVUArray.map(codeVU => `'${codeVU}'`).join(',');
     const sSQL_select = donneSQL_select(codeVUString);
     const results = await connectionCodexOdbc.query(sSQL_select);
@@ -106,7 +137,7 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
    *                                Ce paramètre est optionnel, si non renseigné, la requête retournera l'ensemble des données CODEX
    * @returns : requête SQL sous forme de chaine de caractère
    */
-  function donneSQL_select(lstCodeVU_string='') {
+  function donneSQL_select(lstCodeVU_string: string = ''): string {
     const sSQL_select = `SELECT DISTINCT
                             VU.codeVU,
                             VU.codeCIS,
@@ -160,7 +191,7 @@ async function donneTabCodeVU (connectionCodexOdbc,nbCodeVU) {
    * @param {*} chunkSize 
    * @returns 
    */
-  function chunkArray(array, chunkSize) {
+  function chunkArray(array: string[], chunkSize: number): string[][] {
       const result = [];
       for (let i = 0; i < array.length; i += chunkSize) {
           const chunk = array.slice(i, i + chunkSize);

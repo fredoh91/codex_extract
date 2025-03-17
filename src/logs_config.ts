@@ -55,7 +55,7 @@ const logStream = logrotateStream({
   });
 
 
-const logger = pino({
+const logger = pino.default({
     level: 'debug', // level: niveau de log minimal
     // level: 'info', 
   }, logStream);

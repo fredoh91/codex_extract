@@ -18,16 +18,16 @@ dotenv.config({ path: envPath });
 // --            Création d'un pool de connexion pour la base CODEX via ODBC    --
 // -------------------------------------------------------------------------------
 /**
- * 
- * @returns pool
+ * Crée un pool de connexion pour la base CODEX via ODBC
+ * @returns Promise<odbc.Pool> Le pool de connexion
  */
-async function createPoolCodexOdbc() {
+async function createPoolCodexOdbc(): Promise<odbc.Pool> {
   try {
     const connectionConfig = {
       connectionString: `DSN=${process.env.CODEX_ODBC_NAME};
-                        Uid=${process.env.CODEX_USER};
-                        Pwd=${process.env.CODEX_PASSWORD};
-                        CHARSET=UTF8`,
+                         Uid=${process.env.CODEX_USER};
+                         Pwd=${process.env.CODEX_PASSWORD};
+                         CHARSET=UTF8`,
       connectionTimeout: 10,
       loginTimeout: 10,
     };
@@ -49,10 +49,10 @@ async function createPoolCodexOdbc() {
 // --                          Ferme le pool CODEX via ODBC                     --
 // -------------------------------------------------------------------------------
 /**
- * 
- * @param {*} pool : pool vers SUSAR_EU qui sera fermé
+ * Ferme le pool CODEX via ODBC
+ * @param pool Le pool de connexion à fermer
  */
-async function closePoolCodexOdbc(pool) {
+async function closePoolCodexOdbc(pool: odbc.Pool): Promise<void> {
   try {
     console.log('Fermeture du pool vers la BDD CODEX/ODBC');
     pool.close();
@@ -60,7 +60,7 @@ async function closePoolCodexOdbc(pool) {
     console.error('Erreur à la fermeture de la connexion de CODEX/ODBC :', err);
     throw err;
   }
-};
+}
 
 export {
   createPoolCodexOdbc,

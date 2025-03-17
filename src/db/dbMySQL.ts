@@ -20,7 +20,7 @@ dotenv.config({ path: envPath });
  * 
  * @returns pool
  */
-async function createPoolCodexExtract() {
+async function createPoolCodexExtract(): Promise<mysql.Pool> {
   try {
     const pool = mysql.createPool({
       host: process.env.CODEX_extract_HOST,
@@ -47,7 +47,7 @@ async function createPoolCodexExtract() {
  * 
  * @param {*} pool : pool vers SUSAR_EU qui sera fermé
  */
-async function closePoolCodexExtract(pool) {
+async function closePoolCodexExtract(pool: mysql.Pool): Promise<void> {
   try {
     console.log('Fermeture du pool vers la BDD CODEX_extract');
     pool.end();

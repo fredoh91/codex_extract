@@ -1,13 +1,13 @@
 
 /**
- * Cette fonction est utilisée pour les tests, elle pourra etre supprimée quand le script sera en PROD
- * Elle permet de générer une chaine de caractères aléatoire de caractères de longueur spécifiée (par défaut 4 caractères)
+ * Cette fonction est utilisée pour les tests, elle pourra être supprimée quand le script sera en PROD
+ * Elle permet de générer une chaîne de caractères aléatoire de caractères de longueur spécifiée (par défaut 4 caractères)
  * Elle était utilisée pour générer des identifiants aléatoires pour des INSERT pour les tests
  * 
- * @param {*} length : Longueur de la chaine de caractères à générer
- * @returns : chaine de caractères aléatoire
+ * @param {number} length - Longueur de la chaîne de caractères à générer
+ * @returns {string} - Chaîne de caractères aléatoire
  */
-function generateRandomString(length = 4) {
+function generateRandomString(length: number = 4): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   const charactersLength = characters.length;
@@ -21,12 +21,12 @@ function generateRandomString(length = 4) {
 }
 
 /**
- * Cette fonction retourne une chaine de caractère formatée en TIMESTAMP pour la date et l'heure
+ * Cette fonction retourne une chaîne de caractère formatée en TIMESTAMP pour la date et l'heure
  * Elle permet de stocker la date et l'heure d'export CODEX
  * 
- * @returns : chaine de caractère formatée en TIMESTAMP
+ * @returns {string} - Chaîne de caractère formatée en TIMESTAMP
  */
-function donneformattedDate() {
+function donneformattedDate(): string {
   const now = new Date();
 
   // Utiliser des méthodes pour obtenir la date et l'heure locales
