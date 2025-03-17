@@ -28,7 +28,7 @@ import dotenv from 'dotenv';
 
 const currentUrl = import.meta.url;
 const currentDir = path.dirname(fileURLToPath(currentUrl));
-const envPath = path.resolve(currentDir, '.', '.env');
+const envPath = path.resolve(currentDir, '..', '.env');
 dotenv.config({ path: envPath });
 
 // Nombre total de lignes à traiter pour les tests
